@@ -1,0 +1,30 @@
+{
+  "name": "mimic",
+  "version": "1.0.0",
+  "description": "Visualise data",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "start": "parcel src/index.html -p process.env.PORT"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pinka/mimic.git"
+  },
+  "keywords": [
+    "svg"
+  ],
+  "author": "mt",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Pinka/mimic/issues"
+  },
+  "homepage": "https://github.com/Pinka/mimic#readme",
+  "dependencies": {
+    "d3": "^4.13.0",
+    "element-resize-detector": "^1.1.14",
+    "parcel-bundler": "^1.6.2",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  }
+}
