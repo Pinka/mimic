@@ -1,3 +1,5 @@
+@import './mimic-control/style.css';
+
 html, body, #view {
     height: 100%;
     padding: 0;

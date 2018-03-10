@@ -4,10 +4,8 @@ import * as d3 from 'd3';
 import Mimic from './mimic';
 
 //mimic data
-var width = "auto";//500;//"auto";
-var height = "auto";//300;//"auto";
 var data = d3.range(200).map(phyllotaxis(10));
-function view(viewData) {
+var view = function (viewData) {
   return (
       <svg>
         <g>
@@ -17,7 +15,18 @@ function view(viewData) {
         </g>
       </svg>
   );
-}
+}(data);
+
+ReactDOM.render( 
+    <Mimic 
+                    width="auto" 
+                    height="auto" 
+                    zoom={true} 
+                    view={view} 
+                    data={data} />,
+    document.getElementById('view'));
+
+
 
 function phyllotaxis(radius) {
   var theta = Math.PI * (3 - Math.sqrt(5));
@@ -25,13 +34,8 @@ function phyllotaxis(radius) {
     var r = radius * Math.sqrt(i), a = theta * i;
     return {
       id: index,
-      cx: 500 / 2 + r * Math.cos(a),
+      cx: 500 / 2 + r * Math.cos(a) + 200,
       cy: 300 / 2 + r * Math.sin(a)
     };
   };
 }
-
-
-ReactDOM.render( 
-  <Mimic width={width} height={height} zoom={true} view={view(data)} data={data} />, 
-  document.getElementById('view'));
