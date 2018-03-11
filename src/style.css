@@ -1,4 +1,4 @@
-@import './mimic-control/style.css';
+@import './mimic/tree.css';
 
 html, body, #view {
     height: 100%;
