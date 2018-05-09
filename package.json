@@ -23,8 +23,11 @@
   "dependencies": {
     "d3": "^4.13.0",
     "element-resize-detector": "^1.1.14",
-    "parcel-bundler": "^1.6.2",
+    "parcel-bundler": "^1.8.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
+  },
+  "devDependencies": {
+    "parcel-plugin-sw-precache": "^0.5.1"
   }
 }
