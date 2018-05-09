@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "test",
-    "start": "parcel src/index.html"
+    "start": "NODE_ENV=development parcel src/index.html ",
+    "build": "NODE_ENV=production parcel build src/index.html --public-url ./",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "repository": {
     "type": "git",
@@ -28,6 +31,7 @@
     "react-dom": "^16.2.0"
   },
   "devDependencies": {
+    "gh-pages": "^1.1.0",
     "parcel-plugin-sw-precache": "^0.5.1"
   }
 }
