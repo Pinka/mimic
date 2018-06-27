@@ -1,6 +1,8 @@
 import * as React from 'react';
 import * as d3 from 'd3';
 
+import './tree.css';
+
 class MimicTree extends React.Component {
     constructor(props) {
         super(props);
@@ -85,12 +87,12 @@ class MimicTree extends React.Component {
                 .duration(duration)
                 .attr("height", height);
             
-                tree
+            tree
                 .attr("transform", `translate(${offsetX},${offsetY})`);
 
-            d3.select(self.frameElement).transition()
-                .duration(duration)
-                .style("height", height + "px");
+            // d3.select(self.frameElement).transition()
+            //     .duration(duration)
+            //     .style("height", height + "px");
 
             // Compute the "layout". TODO https://github.com/d3/d3-hierarchy/issues/67
             var index = -1;
