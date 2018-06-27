@@ -24,7 +24,7 @@
   "bugs": {
     "url": "https://github.com/Pinka/mimic/issues"
   },
-  "homepage": "https://github.com/Pinka/mimic#readme",
+  "homepage": "https://pinka.github.io/mimic",
   "dependencies": {
     "d3": "^5.4.0",
     "element-resize-detector": "^1.1.14",
