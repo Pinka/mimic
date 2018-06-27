@@ -28,7 +28,7 @@ class App extends React.Component {
             <svg>
                 {this.state.data.map((mimic, mimicIndex) =>
                     <g id={mimic.id} key={mimicIndex}>
-                        {mimic.data.map((d, i) => <circle r="2.5" cx={d.cx} cy={d.cy} key={i}></circle>)}
+                        {mimic.data.map((d, i) => <circle r={d.r} cx={d.cx} cy={d.cy} key={i}></circle>)}
                     </g>
                 )}
             </svg>
@@ -54,27 +54,26 @@ class App extends React.Component {
             var r = radius * Math.sqrt(i), a = theta * i;
             return {
                 cx: 500 / 2 + r * Math.cos(a) + 200,
-                cy: 300 / 2 + r * Math.sin(a)
+                cy: 300 / 2 + r * Math.sin(a),
+                r: 2.5
             };
         };
     }
     simulateDataChange() {
         setInterval(() => {
 
-            var newX = this.state.data[0].data[0].cx + (Math.random() * 33 * (Math.random() > 0.5 ? -1 : 1));
-            var newY = this.state.data[0].data[0].cy + (Math.random() * 44 * (Math.random() > 0.5 ? -1 : 1));
+            var data = this.state.data.map(mimic => {
 
-            var data = [
-                {
-                    id: 'phyllotaxis',
-                    data: [
-                        {
-                            cx: newX,
-                            cy: newY
-                        }
-                    ]
-                }
-            ];
+                mimic.data.map(i => {
+                    i.cx = i.cx + (Math.random() * 48 * (Math.random() > 0.5 ? -1 : 1));
+                    i.cy = i.cy + (Math.random() * 64 * (Math.random() > 0.5 ? -1 : 1));
+                    i.r = Math.random() * 16;
+
+                    return i;
+                });
+
+                return mimic;
+            });
 
             this.setState({
                 data: data
