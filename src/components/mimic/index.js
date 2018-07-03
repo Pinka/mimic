@@ -20,9 +20,12 @@ class Mimic extends React.Component {
   }
   componentDidMount() {
 
+    this.init(this.props.data);
+
     this.useZoom(this.props.zoom);
     this.useDrag(this.props.drag);
-    this.init(this.props.data);
+
+    this.update(this.props.data);
   }
   componentWillReceiveProps(newProps) {
     this.update(newProps.data);
@@ -30,7 +33,9 @@ class Mimic extends React.Component {
   useDrag(state) {
 
     if (state !== false) {
-
+      d3.select(this.svg)
+        .selectAll('.mc-el')
+        .call(d3.drag().on("drag", this.dragged));
     }
   }
   useZoom(state) {
@@ -52,7 +57,7 @@ class Mimic extends React.Component {
     if (this.tagName === "g") {
       d.x = d3.event.x;
       d.y = d3.event.y;
-      d3.select(this).attr("transform", `translate(${d.x}, ${d.y})`);//d3.event.transform
+      d3.select(this).attr("transform", `translate(${d.x}, ${d.y})`);
     }
     else {
       d3.select(this).attr("cx", d.cx = d3.event.x).attr("cy", d.cy = d3.event.y);
@@ -60,38 +65,61 @@ class Mimic extends React.Component {
   }
   init(data) {
 
-    var svg = d3.select(this.svg);
+    d3.select(this.svg)
+      .selectAll('.mc')
+      .data(data)
+      .enter()
+      .append(function (d, i) {
 
-    data.forEach(mimic => {
+        var element = document.createElementNS("http://www.w3.org/2000/svg", d.name || 'g');
+        var selection = d3.select(element);
 
-      var elements = svg
-        .select('#' + mimic.id)
-        .selectAll('*');
+        return selection.node();
+      })
+      .attr("id", function (d) {
+        return d.id;
+      })
+      .attr("class", "mc")
+      .selectAll('.mc-el')
+      .data(function (d, i) {
+        return data[i].data
+      })
+      .enter()
+      .append(function (d, i) {
 
-      elements.each(function (d, i) {
+        var element = document.createElementNS("http://www.w3.org/2000/svg", d.name);
+        var selection = d3.select(element)
 
-        var elementData = mimic.data[i];
-        if (elementData) {
-
-          var transition = d3.select(this)
-            .data([elementData])
-            .transition();
-
-          Object.keys(elementData).map(key => {
-            transition.attr(key, function (d) {
-              return d[key];
-            });
-          });
-
-          transition.duration(250);
-        }
-      });
-
-      // elements.call(d3.drag().on("drag", this.dragged));
-    });
+        return selection.node();
+      })
+      .attr("id", function (d, i) {
+        return d.id;
+      })
+      .attr("class", "mc-el");
   }
   update(data) {
-    this.init(data);
+
+    d3.select(this.svg)
+      .selectAll('.mc')
+      .data(data)
+      .selectAll('.mc-el')
+      .data(function (d, i) {
+        return data[i].data
+      })
+      .each(function (d) {
+
+        var transition = d3
+          .select(this)
+          .transition();
+
+        d.attr.forEach((attr, i) => {
+          transition.attr(attr.name, function (d) {
+            return d.attr[i].value;
+          });
+        });
+
+        transition.duration(250);
+      });
   }
   getWidth() {
 
@@ -114,16 +142,9 @@ class Mimic extends React.Component {
     return height;
   }
   render() {
-
-    var content = this.props.view || this.props.children;
-
     return (
       <div ref={r => { this.container = r }} className="mimic-view">
-        <svg ref={r => { this.svg = r }} className="mimic" width={this.getWidth()} height={this.getHeight()}>
-          {React.Children.map(content.props.children, (element, idx) => {
-            return React.cloneElement(element, { ref: idx });
-          })}
-        </svg>
+        <svg ref={r => { this.svg = r }} className="mimic" width={this.getWidth()} height={this.getHeight()} />
       </div>
     );
   }
