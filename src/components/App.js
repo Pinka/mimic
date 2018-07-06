@@ -12,14 +12,75 @@ class App extends React.Component {
 
         this.simulateDataChange = this.simulateDataChange.bind(this);
 
+        var phyllotaxisData = d3
+        .range(100)
+        .map(this.phyllotaxis(10));
+
+        var minX = phyllotaxisData.reduce((result, next) => {
+
+            var attr = next.attr.filter(attr => attr.name === 'cx')[0];
+
+            if(attr.value < result) {
+                result = attr.value;
+            }
+
+            return result;
+        }, 9999);
+
+        var minY = phyllotaxisData.reduce((result, next) => {
+
+            var attr = next.attr.filter(attr => attr.name === 'cy')[0];
+
+            if(attr.value < result) {
+                result = attr.value;
+            }
+
+            return result;
+        }, 9999);
+
+        phyllotaxisData = phyllotaxisData.map(item => {
+            item.attr = item.attr.map(attr => {
+                if(attr.name === 'cx') {
+                    attr.value = attr.value - minX;
+                }
+
+                if(attr.name === 'cy') {
+                    attr.value = attr.value - minY;
+                }
+
+                return attr;
+            });
+
+            return item;
+        });
+
+
         //mimic data
         this.state = {
             data: [
                 {
                     id: "phyllotaxis",
-                    data: d3
-                        .range(100)
-                        .map(this.phyllotaxis(10))
+                    x: minX,
+                    y: minY,
+                    data: phyllotaxisData
+                },
+                {
+                    id: 'square',
+                    x: 20,
+                    y: 80,
+                    data: [
+                        {
+                            name: 'text',
+                            id: 't0',
+                            text: 'hello world',
+                            attr: [
+                                {
+                                    name: 'color',
+                                    value: 'green'
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         };
@@ -30,7 +91,7 @@ class App extends React.Component {
     render() {
         return (
             <div className="app">
-                <Mimic width="auto" height="auto" zoom={true} drag={true} data={this.state.data} />
+                <Mimic width="auto" height="auto" zoom={false} drag={true} data={this.state.data} />
             </div>
         );
     }
@@ -44,7 +105,7 @@ class App extends React.Component {
                 attr: [
                     {
                         name: 'cx',
-                        value: 500 / 2 + r * Math.cos(a) + 200
+                        value: 500 / 2 + r * Math.cos(a)
                     },
                     {
                         name: 'cy',
@@ -62,7 +123,7 @@ class App extends React.Component {
         setInterval(() => {
 
             var data = this.state.data.map(mimic => {
-
+                
                 var xx = Math.floor(Math.random() * 4);
                 mimic.data.forEach((el, i) => {
 
@@ -70,14 +131,14 @@ class App extends React.Component {
                         el.attr = el.attr.map(attr => {
 
                             switch (attr.name) {
-                                case 'cx':
-                                    attr.value = attr.value + (Math.random() * 48 * (Math.random() > 0.5 ? -1 : 1));
-                                    break;
-                                case 'cy':
-                                    attr.value = attr.value + (Math.random() * 64 * (Math.random() > 0.5 ? -1 : 1));
-                                    break;
+                                // case 'cx':
+                                //     attr.value = attr.value + (Math.random() * 48 * (Math.random() > 0.5 ? -1 : 1));
+                                //     break;
+                                // case 'cy':
+                                //     attr.value = attr.value + (Math.random() * 64 * (Math.random() > 0.5 ? -1 : 1));
+                                //     break;
                                 case 'r':
-                                    attr.value = Math.random() * 16;
+                                    attr.value = Math.random() * 8;
                                     break;
 
                             }

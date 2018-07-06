@@ -2,6 +2,8 @@ import * as React from 'react';
 import * as d3 from 'd3';
 // import ResizeDetector from 'element-resize-detector';
 
+import './style.css';
+
 class Mimic extends React.Component {
   constructor(props) {
     super(props);
@@ -13,7 +15,6 @@ class Mimic extends React.Component {
 
     this.getWidth = this.getWidth.bind(this);
     this.getHeight = this.getHeight.bind(this);
-    // this.initDrag = this.initDrag.bind(this);
   }
   componentDidCatch(err, stack) {
     alert(err, stack);
@@ -32,10 +33,15 @@ class Mimic extends React.Component {
   }
   useDrag(state) {
 
-    if (state !== false) {
+    if (state === true) {
       d3.select(this.svg)
-        .selectAll('.mc-el')
-        .call(d3.drag().on("drag", this.dragged));
+        .selectAll('.mc')
+        .on("mouseover", this.mouseOver)
+        .on("mouseout", this.mouseOut)
+        .call(d3.drag()
+          //.on("start", this.dragstarted)
+          .on("drag", this.dragged));
+          //.on("end", this.dragended));
     }
   }
   useZoom(state) {
@@ -43,7 +49,7 @@ class Mimic extends React.Component {
     var svg = d3.select(this.svg);
     var g = svg.select("g");
 
-    if (state !== false) {
+    if (state === true) {
       var zoomed = function () {
         g.attr("transform", d3.event.transform);
       };
@@ -53,14 +59,21 @@ class Mimic extends React.Component {
         .on("zoom", zoomed));
     }
   }
+  mouseOver() {
+    if (this.tagName === "g") {
+      d3.select(this).raise().classed("active", true);
+    }
+  }
+  mouseOut() {
+    if (this.tagName === "g") {
+      d3.select(this).classed("active", false);
+    }
+  }
   dragged(d) {
     if (this.tagName === "g") {
       d.x = d3.event.x;
       d.y = d3.event.y;
       d3.select(this).attr("transform", `translate(${d.x}, ${d.y})`);
-    }
-    else {
-      d3.select(this).attr("cx", d.cx = d3.event.x).attr("cy", d.cy = d3.event.y);
     }
   }
   init(data) {
@@ -80,6 +93,9 @@ class Mimic extends React.Component {
         return d.id;
       })
       .attr("class", "mc")
+      .attr("transform", function(d) {
+        return `translate(${d.x}, ${d.y})`;
+      })
       .selectAll('.mc-el')
       .data(function (d, i) {
         return data[i].data
@@ -89,6 +105,10 @@ class Mimic extends React.Component {
 
         var element = document.createElementNS("http://www.w3.org/2000/svg", d.name);
         var selection = d3.select(element)
+
+        if(d.text) {
+          selection.text(d.text);
+        }
 
         return selection.node();
       })
@@ -117,6 +137,12 @@ class Mimic extends React.Component {
             return d.attr[i].value;
           });
         });
+
+        if(d.text) {
+          transition.text(function (d) {
+            return d.text;
+          });
+        }
 
         transition.duration(250);
       });
