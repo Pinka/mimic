@@ -72,7 +72,7 @@ class App extends React.Component {
                         {
                             name: 'text',
                             id: 't0',
-                            text: 'hello world',
+                            text: 'HELLO WORLD',
                             attr: [
                                 {
                                     name: 'color',

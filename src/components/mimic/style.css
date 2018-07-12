@@ -1,6 +1,10 @@
 
-.active {
-    stroke: #000;
-    stroke-width: 2px;
+.highlight {
+    background-color: black;
+    opacity: 0.2;
     cursor: pointer;
+}
+
+.active .highlight {
+    opacity: 0.3;
 }

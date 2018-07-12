@@ -12,6 +12,7 @@ class Mimic extends React.Component {
     this.update = this.update.bind(this);
     this.useZoom = this.useZoom.bind(this);
     this.useDrag = this.useDrag.bind(this);
+    this.highlight = this.highlight.bind(this);
 
     this.getWidth = this.getWidth.bind(this);
     this.getHeight = this.getHeight.bind(this);
@@ -41,7 +42,7 @@ class Mimic extends React.Component {
         .call(d3.drag()
           //.on("start", this.dragstarted)
           .on("drag", this.dragged));
-          //.on("end", this.dragended));
+      //.on("end", this.dragended));
     }
   }
   useZoom(state) {
@@ -59,14 +60,97 @@ class Mimic extends React.Component {
         .on("zoom", zoomed));
     }
   }
+  highlight() {
+
+    d3.select(this.svg).selectAll('.mc').each(function () {
+
+      var el = this;
+      var rect = this.getBoundingClientRect();
+
+      console.log(el.id + " width:" + rect.width);
+      console.log(el.id + " height:" + rect.height);
+
+      var data = [
+        {
+          x: 0,
+          y: -rect.height,
+          width: rect.width,
+          height: rect.height
+        }
+      ];
+
+      d3.select(el)
+        .selectAll(".highlight")
+        .data(data)
+        .enter()
+        .insert("foreignObject",":first-child")
+        .attr("class", "highlight")
+
+      var transition = d3.select(el)
+        .selectAll(".highlight")
+
+      transition
+        .attr("width", function (d) {
+          return d.width;
+        })
+        .attr("height", function (d) {
+          return d.height;
+        })
+        .attr("x", function (d) {
+          return d.x;
+        })
+        .attr("y", function (d) {
+          return d.y;
+        });
+    });
+  }
   mouseOver() {
     if (this.tagName === "g") {
-      d3.select(this).raise().classed("active", true);
+
+      var rect = this.getBoundingClientRect();
+      
+      var data = [
+        {
+          x: 0,
+          y: 0,//-rect.height/2,
+          width: rect.width,
+          height: rect.height
+        }
+      ];
+
+      d3.select(this)
+        .raise()
+        .classed("active", true)
+        .selectAll(".highlight")
+        .data(data)
+        .enter()
+        .append("foreignObject")
+        .attr("class", "highlight")
+
+      var transition = d3.select(this)
+        .selectAll(".highlight")
+
+      transition
+        .attr("width", function (d) {
+          return d.width;
+        })
+        .attr("height", function (d) {
+          return d.height;
+        })
+        .attr("x", function (d) {
+          return d.x;
+        })
+        .attr("y", function (d) {
+          return d.y;
+        });
     }
   }
-  mouseOut() {
+  mouseOut(el) {
     if (this.tagName === "g") {
-      d3.select(this).classed("active", false);
+      d3.select(this)
+        .classed("active", false)
+        .selectAll(".highlight")
+        .remove();
     }
   }
   dragged(d) {
@@ -93,7 +177,7 @@ class Mimic extends React.Component {
         return d.id;
       })
       .attr("class", "mc")
-      .attr("transform", function(d) {
+      .attr("transform", function (d) {
         return `translate(${d.x}, ${d.y})`;
       })
       .selectAll('.mc-el')
@@ -106,7 +190,7 @@ class Mimic extends React.Component {
         var element = document.createElementNS("http://www.w3.org/2000/svg", d.name);
         var selection = d3.select(element)
 
-        if(d.text) {
+        if (d.text) {
           selection.text(d.text);
         }
 
@@ -116,8 +200,11 @@ class Mimic extends React.Component {
         return d.id;
       })
       .attr("class", "mc-el");
+    // .exit();
   }
   update(data) {
+
+    var highlightFn = this.useHighlight;
 
     d3.select(this.svg)
       .selectAll('.mc')
@@ -138,7 +225,7 @@ class Mimic extends React.Component {
           });
         });
 
-        if(d.text) {
+        if (d.text) {
           transition.text(function (d) {
             return d.text;
           });
