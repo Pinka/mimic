@@ -4,6 +4,8 @@ import * as d3 from 'd3';
 import Mimic from './mimic';
 // import MimicTree from './mimic/tree';
 
+import ChartJs from './chartjs';
+
 import './style.css';
 
 class App extends React.Component {
@@ -91,7 +93,8 @@ class App extends React.Component {
     render() {
         return (
             <div className="app">
-                <Mimic width="auto" height="auto" zoom={false} drag={true} data={this.state.data} />
+                {/* <Mimic width="auto" height="auto" zoom={false} drag={true} data={this.state.data} /> */}
+                <ChartJs />
             </div>
         );
     }
