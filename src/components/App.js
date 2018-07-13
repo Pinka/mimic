@@ -94,7 +94,7 @@ class App extends React.Component {
         return (
             <div className="app">
                 {/* <Mimic width="auto" height="auto" zoom={false} drag={true} data={this.state.data} /> */}
-                <ChartJs />
+                <ChartJs value={54} />
             </div>
         );
     }

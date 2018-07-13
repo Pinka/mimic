@@ -32,7 +32,7 @@ class ChartJs extends React.Component {
         return (
             <div style={{ width: 400, height: 200, position: 'relative' }}>
                 <canvas ref={r => { this.container = r }}></canvas>
-                <div className="label" style={{position: 'absolute', bottom: 0, width: '100%', textAlign: 'center'}}>54</div>
+                <div className="label" style={{position: 'absolute', bottom: 0, width: '100%', textAlign: 'center'}}>{this.props.value}</div>
             </div>
         );
     }
