@@ -1,7 +1,6 @@
 import React from 'react';
 import * as d3 from 'd3';
 
-{/* <g id="weel" /> */ }
 export class Weel extends React.Component {
     componentDidMount() {
 
@@ -9,7 +8,7 @@ export class Weel extends React.Component {
             container: this.el,
             radius: 100,
             margin: 10,
-            panel: true,
+            info: true,
             outerPointer: true,
             ...this.props
         };
@@ -20,12 +19,11 @@ export class Weel extends React.Component {
 
         const { container, radius, outerPointer, margin } = config;
         const radiusSquare = Math.pow(radius, 2);
-
         var domainMax = 1;
         var fullRadius = radius + margin;
-        var width = 2 * fullRadius;
-        var height = width;
-        
+
+        var height = 2 * fullRadius;
+        var width = height;
 
         var data = [{
             absoluteValue: 0,
@@ -53,11 +51,27 @@ export class Weel extends React.Component {
             .attr("r", radius)
             .attr("fill", "transparent")
             .attr("stroke", "black")
-            .attr('class', 'ring');
+            .attr('class', 'ring')
+            .on('mousedown', handleClick);
 
         var points = weel.append('g')
             .attr('class', 'points')
             .attr('transform', 'translate(' + fullRadius + ',' + fullRadius + ')');
+
+        var info = weel.append('g')
+            .attr('class', 'info')
+            .attr('transform', 'translate(' + 220 + ',' + 12 + ')');
+
+        info.append('text')
+            .attr('class', 'angle')
+            .attr('text-anchor', 'end')
+            .text(`${0}°`);
+
+        info.append('text')
+            .attr('class', 'speed')
+            .attr('y', 15)
+            .attr('text-anchor', 'end')
+            .text(`${0}%`);
 
         var drag = d3.drag()
             .subject(function (d) { return d; })
@@ -66,32 +80,59 @@ export class Weel extends React.Component {
                 d3.select(this).classed('active', false);
             });
 
-        function dragmove(d, i) {
-
-            d3.select(this).classed('active', true);
+        function calcData(d) {
 
             var coordinates = d3.mouse(weel.node());
             var x = coordinates[0] - fullRadius;
             var y = coordinates[1] - fullRadius;
+            var currentRadius = Math.pow(x, 2) + Math.pow(y, 2);
 
-            var newAngle = Math.atan2(y, x) * 57.2957795;
+            var angle = Math.atan2(y, x) * 57.2957795;
 
-            if (newAngle < 0) {
-                newAngle = 360 + newAngle;
+            if (angle < 0) {
+                angle = 360 + angle;
             }
 
-            d.absoluteValue = angularScale.invert(newAngle);
+            d.absoluteValue = angularScale.invert(angle);
             d.actualRadius = radius;
 
-            d.isOutside = (Math.pow(x, 2) + Math.pow(y, 2)) > radiusSquare;
+            d.isOutside = currentRadius > radiusSquare;
 
             d.x = d.isOutside ? d.x : x;
             d.y = d.isOutside ? d.y : y;
 
-            console.log(x, y, d.isOutside);
+            return {
+                angle,
+                currentRadius
+            };
+        }
+
+        function dragmove(d, i) {
+
+            d3.select(this).classed('active', true);
+
+            const { angle, currentRadius } = calcData(d);
 
             // Redraw
             drawPoints();
+            info.select('.angle').text(`${Math.floor(angle)}°`);
+            info.select('.speed').text(`${Math.floor(Math.sqrt(currentRadius))}%`);
+        }
+
+        function handleClick(d, i) {
+
+            const { angle, currentRadius } = calcData(data[0]);
+
+            // Redraw
+            drawPoints();
+            info.select('.angle').text(`${Math.floor(angle)}°`);
+            info.select('.speed').text(`${Math.floor(Math.sqrt(currentRadius))}%`);
+
+            var ev = new Event('mousedown');
+            ev.view = window;
+
+            var point = points.selectAll('.point');
+            point.node().dispatchEvent(ev);
         }
 
         drawPoints();
@@ -125,7 +166,8 @@ export class Weel extends React.Component {
                 })
                 .style("opacity", function (d) {
                     return outerPointer || d.isOutside ? 1 : 0;
-                });
+                })
+                .on('click', () => drawPoints);
 
             var innerPoint = points.selectAll('.point')
                 .data(data);

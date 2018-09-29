@@ -5,5 +5,9 @@ import registerServiceWorker from './registerServiceWorker';
 
 import './index.css';
 
+window.onNewContentAvailable = () => {
+    alert("New content available. Reload!");
+}
+
 ReactDOM.render(<App />, document.getElementById('root'));
 registerServiceWorker();

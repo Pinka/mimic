@@ -1,7 +1,6 @@
 import React from 'react';
 import * as d3 from 'd3';
 
-{/* <g id="weel" /> */ }
 export class PieChart extends React.Component {
     constructor(props) {
         super(props);
