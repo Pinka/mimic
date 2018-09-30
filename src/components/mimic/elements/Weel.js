@@ -52,7 +52,8 @@ export class Weel extends React.Component {
             .attr("fill", "transparent")
             .attr("stroke", "black")
             .attr('class', 'ring')
-            .on('mousedown', handleClick);
+            .on('mousedown', handleMouse)
+            .on('touchstart', handleTouch);
 
         var points = weel.append('g')
             .attr('class', 'points')
@@ -119,7 +120,7 @@ export class Weel extends React.Component {
             info.select('.speed').text(`${Math.floor(Math.sqrt(currentRadius))}%`);
         }
 
-        function handleClick(d, i) {
+        function handleMouse(d, i) {
 
             const { angle, currentRadius } = calcData(data[0]);
 
@@ -128,11 +129,27 @@ export class Weel extends React.Component {
             info.select('.angle').text(`${Math.floor(angle)}°`);
             info.select('.speed').text(`${Math.floor(Math.sqrt(currentRadius))}%`);
 
-            var ev = new Event('mousedown');
-            ev.view = window;
+            var mouseDownEvent = new Event('mousedown');
+            mouseDownEvent.view = window;
 
             var point = points.selectAll('.point');
-            point.node().dispatchEvent(ev);
+            point.node().dispatchEvent(mouseDownEvent);
+        }
+
+        function handleTouch(event) {
+
+            const { angle, currentRadius } = calcData(data[0]);
+
+            // Redraw
+            drawPoints();
+            info.select('.angle').text(`${Math.floor(angle)}°`);
+            info.select('.speed').text(`${Math.floor(Math.sqrt(currentRadius))}%`);
+
+            var mouseDownEvent = new Event('mousedown');
+            mouseDownEvent.view = window;
+
+            var point = points.selectAll('.point');
+            point.node().dispatchEvent(mouseDownEvent);
         }
 
         drawPoints();
