@@ -1,6 +1,23 @@
 {
-  "main.css": "static/css/main.0c46ec42.css",
-  "main.css.map": "static/css/main.0c46ec42.css.map",
-  "main.js": "static/js/main.c6747025.js",
-  "main.js.map": "static/js/main.c6747025.js.map"
+  "files": {
+    "main.css": "/Pinka/mimic/static/css/main.d1b05096.chunk.css",
+    "main.js": "/Pinka/mimic/static/js/main.ddd6eb80.chunk.js",
+    "main.js.map": "/Pinka/mimic/static/js/main.ddd6eb80.chunk.js.map",
+    "runtime-main.js": "/Pinka/mimic/static/js/runtime-main.3b558eba.js",
+    "runtime-main.js.map": "/Pinka/mimic/static/js/runtime-main.3b558eba.js.map",
+    "static/js/2.176439c4.chunk.js": "/Pinka/mimic/static/js/2.176439c4.chunk.js",
+    "static/js/2.176439c4.chunk.js.map": "/Pinka/mimic/static/js/2.176439c4.chunk.js.map",
+    "index.html": "/Pinka/mimic/index.html",
+    "precache-manifest.03d899194c122d2f01837827f4cef176.js": "/Pinka/mimic/precache-manifest.03d899194c122d2f01837827f4cef176.js",
+    "service-worker.js": "/Pinka/mimic/service-worker.js",
+    "static/css/main.d1b05096.chunk.css.map": "/Pinka/mimic/static/css/main.d1b05096.chunk.css.map",
+    "static/js/2.176439c4.chunk.js.LICENSE": "/Pinka/mimic/static/js/2.176439c4.chunk.js.LICENSE",
+    "static/media/logo.svg": "/Pinka/mimic/static/media/logo.5d5d9eef.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.3b558eba.js",
+    "static/js/2.176439c4.chunk.js",
+    "static/css/main.d1b05096.chunk.css",
+    "static/js/main.ddd6eb80.chunk.js"
+  ]
 }
