@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/mimic/static/css/main.97f3abdb.chunk.css",
-    "main.js": "/mimic/static/js/main.a018c1a0.chunk.js",
-    "main.js.map": "/mimic/static/js/main.a018c1a0.chunk.js.map",
+    "main.js": "/mimic/static/js/main.cd76f8bc.chunk.js",
+    "main.js.map": "/mimic/static/js/main.cd76f8bc.chunk.js.map",
     "runtime-main.js": "/mimic/static/js/runtime-main.d55101d9.js",
     "runtime-main.js.map": "/mimic/static/js/runtime-main.d55101d9.js.map",
     "static/js/2.65f39c79.chunk.js": "/mimic/static/js/2.65f39c79.chunk.js",
     "static/js/2.65f39c79.chunk.js.map": "/mimic/static/js/2.65f39c79.chunk.js.map",
     "index.html": "/mimic/index.html",
-    "precache-manifest.2184809f1b43b9259852f684132a9294.js": "/mimic/precache-manifest.2184809f1b43b9259852f684132a9294.js",
+    "precache-manifest.385c8d9b83e4e95300b17fdf8d4d342c.js": "/mimic/precache-manifest.385c8d9b83e4e95300b17fdf8d4d342c.js",
     "service-worker.js": "/mimic/service-worker.js",
     "static/css/main.97f3abdb.chunk.css.map": "/mimic/static/css/main.97f3abdb.chunk.css.map",
     "static/js/2.65f39c79.chunk.js.LICENSE": "/mimic/static/js/2.65f39c79.chunk.js.LICENSE"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.d55101d9.js",
     "static/js/2.65f39c79.chunk.js",
     "static/css/main.97f3abdb.chunk.css",
-    "static/js/main.a018c1a0.chunk.js"
+    "static/js/main.cd76f8bc.chunk.js"
   ]
 }
