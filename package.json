@@ -6,10 +6,12 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.0",
     "@testing-library/user-event": "^7.2.1",
-    "gh-pages": "^2.1.1",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-scripts": "3.3.0"
+    "clipboard": "^2.0.4",
+    "gh-pages": "^2.2.0",
+    "paper": "^0.12.4",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
+    "react-scripts": "3.4.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -31,7 +33,7 @@
   "bugs": {
     "url": "https://github.com/Pinka/mimic/issues"
   },
-  "homepage": "https://github.com/Pinka/mimic#readme",
+  "homepage": "https://pinka.github.io/mimic",
   "eslintConfig": {
     "extends": "react-app"
   },

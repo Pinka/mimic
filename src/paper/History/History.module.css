@@ -1,0 +1,15 @@
+
+.history {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 5px;
+
+    list-style: none;
+    font-size: 10;
+    font-family: monospace;
+}
+
+.history li {
+    background-color: rgba(0,0,0,0.11);
+}

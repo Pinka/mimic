@@ -1,0 +1,16 @@
+
+.tools {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 5px;
+}
+
+.toolButton {
+  background-color: var(--button-background-color);
+  margin: 5px;
+  border-style: none;
+  border: 1px solid var(--button-border-color);
+  color: var(--button-text-color);
+  cursor: pointer;
+}
