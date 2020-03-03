@@ -1,9 +1,10 @@
-import React, { memo } from 'react';
-// import paper from 'paper';
+import React, { memo, useCallback } from 'react';
+import paper from 'paper';
 import { addLine, addCircle, addRect, addText, save, load } from '../utils';
 // import { revertHistory } from '../tools/history';
 
 import styles from './PaperTools.module.css';
+import MimicList from '../../MimicList';
 
 const PaperTools = memo(() => {
 
@@ -16,7 +17,11 @@ const PaperTools = memo(() => {
         { title: "Load", onClick: load },
         // { title: "Undo", onClick: revertHistory },
         // { title: "Refresh Bindings", onClick: bind}
-     ];
+    ];
+
+    const onSelect = useCallback(mimic => {
+        paper.project.activeLayer.importJSON(mimic.config);
+    }, []);
 
     return (
         <div className={styles.tools}>
@@ -28,6 +33,7 @@ const PaperTools = memo(() => {
                     {tool.title}
                 </button>
             )}
+            <MimicList onSelect={onSelect} />
         </div>
     );
 });

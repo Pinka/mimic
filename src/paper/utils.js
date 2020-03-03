@@ -1,14 +1,17 @@
 import paper from 'paper';
+import faker from 'faker';
 
 export const defaultFillColor = 'rgba(0,0,0,0.87)';
 export const defaultStrokeColor = 'rgba(0,0,0,0.87)';
+
+const sorageUrl = 'https://9tvgcnacn7.execute-api.eu-central-1.amazonaws.com/default/mimic';
 
 export const initCanvas = (canvas) => {
     paper.setup(canvas);
 };
 
 export const bind = () => {
-// debugger;
+    // debugger;
     getItems()
         .forEach(async item => {
 
@@ -283,19 +286,67 @@ export const addGrid = () => {
     prevLayer.activate();
 };
 
-export const save = () => {
-    const json = paper.project.activeLayer.exportJSON();
-    localStorage.setItem('project', json);
-};
+export const save = async () => {
+    
+    const config = paper.project.activeLayer.exportJSON();
+    localStorage.setItem('project', config);
 
-export const load = () => {
-    const json = localStorage.getItem('project');
-    if (json) {
-        // paper.project.clear();
-        paper.project.activeLayer.importJSON(json)
+    const name = faker.random.words();
+
+    const data = {
+        name,
+        config
+    };
+
+    try {
+        await fetch(sorageUrl, {
+            method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+            mode: 'cors', // no-cors, *cors, same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': 'wL5upgCpe33dj3Ozu1Ron2x9PFnzlE4S7DXh8DH6',
+            },
+            body: JSON.stringify(data)
+        });
+    }
+    catch(error) {
+        console.log("Save mimic error", error);
     }
 };
 
+export const load = async () => {
+    
+    const json = localStorage.getItem('project');
+    if (json) {
+        // paper.project.clear();
+        paper.project.activeLayer.importJSON(json);
+    }
+};
+
+export const getMimicsList = async () => {
+
+    try {
+
+        const response = await fetch(sorageUrl, {
+            method: 'GET', // *GET, POST, PUT, DELETE, etc.
+            mode: 'cors', // no-cors, *cors, same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': 'wL5upgCpe33dj3Ozu1Ron2x9PFnzlE4S7DXh8DH6',
+            }
+        });
+
+        const mimics = await response.json();
+        console.log("Mimics loaded", mimics);
+
+        return mimics;
+    }
+    catch(error) {
+        console.log("Mimics load error", error);
+    }
+};
 
 export const get = (obj = this, path, separator = '.') => {
     var properties = Array.isArray(path) ? path : path.split(separator)
@@ -304,7 +355,7 @@ export const get = (obj = this, path, separator = '.') => {
 
 function set(obj, path, value) {
 
-    if(!path) {
+    if (!path) {
         return;
     }
 
