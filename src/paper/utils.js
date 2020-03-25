@@ -4,6 +4,8 @@ import faker from 'faker';
 export const defaultFillColor = 'rgba(0,0,0,0.87)';
 export const defaultStrokeColor = 'rgba(0,0,0,0.87)';
 
+export const MIMIC_LAYER_NAME = "MIMIC_LAYER";
+
 const sorageUrl = 'https://9tvgcnacn7.execute-api.eu-central-1.amazonaws.com/default/mimic';
 
 export const initCanvas = (canvas) => {
@@ -11,7 +13,7 @@ export const initCanvas = (canvas) => {
 };
 
 export const bind = () => {
-    // debugger;
+
     getItems()
         .forEach(async item => {
 
@@ -286,12 +288,26 @@ export const addGrid = () => {
     prevLayer.activate();
 };
 
+export const createNew = async () => {
+
+    const mimicName = faker.random.words();
+    const mimicLayer = getMimicLayer();
+
+    mimicLayer.clear();
+    mimicLayer.data = {
+        mimicName
+    };
+};
+
 export const save = async () => {
     
-    const config = paper.project.activeLayer.exportJSON();
-    localStorage.setItem('project', config);
+    const mimicLayer = getMimicLayer();
 
-    const name = faker.random.words();
+    const name = mimicLayer.data.mimicName ?? faker.random.words();
+    const config = mimicLayer.exportJSON();
+
+    localStorage.setItem('project', config);
+    localStorage.setItem('projectName', name);
 
     const data = {
         name,
@@ -317,10 +333,23 @@ export const save = async () => {
 
 export const load = async () => {
     
-    const json = localStorage.getItem('project');
-    if (json) {
-        // paper.project.clear();
-        paper.project.activeLayer.importJSON(json);
+    let mimicLayer = getMimicLayer();
+    const config = localStorage.getItem('project');
+    const mimicName = localStorage.getItem('projectName') ?? faker.random.words();
+
+    if (config) {
+
+        if(!mimicLayer) {
+            mimicLayer = paper.project.addLayer(new paper.Layer());
+            mimicLayer.name = MIMIC_LAYER_NAME;
+            mimicLayer.activate();
+        }
+
+        mimicLayer.data = {
+            mimicName
+        };
+
+        mimicLayer.importJSON(config);
     }
 };
 
@@ -346,6 +375,14 @@ export const getMimicsList = async () => {
     catch(error) {
         console.log("Mimics load error", error);
     }
+};
+
+export const getMimicLayer = () => {
+    return paper.project?.layers[MIMIC_LAYER_NAME];
+};
+
+export const getMimicName = () => {
+    return getMimicLayer()?.data.mimicName;
 };
 
 export const get = (obj = this, path, separator = '.') => {

@@ -1,12 +1,14 @@
-import React, { useEffect, memo, useRef } from 'react';
+import React, { useEffect, memo, useRef, useContext } from 'react';
 import paper from 'paper';
-import { addGrid, load, bind, onAction } from './utils';
+import { addGrid, load, bind, onAction, getMimicName } from './utils';
 import { addToolSelect } from './tools/select';
+import { ActiveMimicContext } from '../App';
 
 const Paper = memo(() => {
 
     const ref = useRef();
     const actionQueue = useRef([]);
+    const { dispatch } = useContext(ActiveMimicContext);
 
     useEffect(() => {
 
@@ -16,8 +18,13 @@ const Paper = memo(() => {
 
         addToolSelect();
         addGrid();
-
         load();
+
+        dispatch({
+            type: 'SetMimicName',
+            payload: getMimicName()
+        });
+
         bind();
 
         paper.view.onFrame = (event) => {
@@ -25,7 +32,7 @@ const Paper = memo(() => {
 
                 const action = queue[queue.length - 1];
                 onAction(action);
-    
+
                 const index = queue.indexOf(action);
                 if (index > -1) {
                     queue.splice(index, 1);
@@ -54,14 +61,14 @@ const Paper = memo(() => {
                 .forEach(action => {
                     queue.push(action);
                 });
-    
+
         }, 1000);
-    
+
         // return () => {
         //     clearInterval();
         //     clearInterval();
         // }
-    }, []);
+    }, [dispatch]);
 
     return (
         <canvas ref={ref} resize="resize"></canvas>
