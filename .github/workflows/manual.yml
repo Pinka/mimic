@@ -4,13 +4,11 @@
 #       - "v*" # matches v1.0.1, v1.2, v2, etc
 on: 
   workflow_dispatch:
-#     inputs:
-#       logLevel:
-#         description: 'Log level'     
-#         required: true
-#         default: 'warning'
-#       tags:
-#         description: 'Test scenario tags'
+    inputs:
+      version:
+        description: 'Version'     
+        required: true
+        default: 'v'
 jobs:
   once:
     name: Create GitHub release
@@ -24,21 +22,23 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: true
-          prerelease: true
+          tag_name: ${{ github.event.inputs.version }}}
+          release_name: Release ${{ github.event.inputs.version }}}
+          draft: false
+          prerelease: false
 
   build:
-    name: Create release build, tag and upload builds
-    needs: once
     strategy:
       matrix:
         os: [a, b, c]
+    name: Create release build for ${{ matrix.os }}
+    needs: once
     runs-on: ubuntu-latest
     steps:
+      - name: Check out the code
       - uses: actions/checkout@v2
-      - name: Use Node.js 10.x  
+        
+      - name: Create Release Build
         uses: actions/setup-node@v1
         with:
           node-version: 10.x
