@@ -1,8 +1,16 @@
-on:
-  push:
-    tags:
-      - "v*" # matches v1.0.1, v1.2, v2, etc
-
+# on:
+#   push:
+#     tags:
+#       - "v*" # matches v1.0.1, v1.2, v2, etc
+on: 
+  workflow_dispatch:
+#     inputs:
+#       logLevel:
+#         description: 'Log level'     
+#         required: true
+#         default: 'warning'
+#       tags:
+#         description: 'Test scenario tags'
 jobs:
   once:
     name: Create GitHub release
