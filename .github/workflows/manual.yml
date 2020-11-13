@@ -24,12 +24,12 @@ jobs:
   build:
     name: Create release build, tag and upload builds
     needs: once
-    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [a, b, c]
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       - name: Install dependencies
         run: |
