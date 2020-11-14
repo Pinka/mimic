@@ -28,14 +28,13 @@ jobs:
           prerelease: false
 
   build:
+    name: Create release build for ${{ matrix.os }}
+    needs: once
     strategy:
       matrix:
         os: [a, b, c]
-    name: Create release build for ${{ matrix.os }}
-    needs: once
     runs-on: ubuntu-latest
     steps:
-      - name: Check out the code
       - uses: actions/checkout@v2
         
       - name: Create Release Build
