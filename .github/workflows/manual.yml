@@ -11,35 +11,24 @@ on: push
 #         description: 'Version'     
 #         required: true
 #         default: 'v'
-jobs:
-  commit-date:
-    runs-on: ubuntu-latest
-    outputs:
-      commit_at: ${{ steps.author-date.outputs.result }}
-    steps:
-      - uses: actions/github-script@0.3.0
-        id: author-date
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            const commit_details = await github.git.getCommit({owner: context.repo.owner, repo: context.repo.repo, commit_sha: context.sha});
-            return commit_details.data.author.date.slice(0, 10);
-            
+jobs:            
   create-release:
     name: Create GitHub release
-    needs: commit-date
     runs-on: ubuntu-latest
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
       - name: Create a release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ needs.commit-date.outputs.commit_at.date }}
-          release_name: ${{ 'release-' + needs.commit-date.outputs.commit_at.date }}
+          tag_name: ${{steps.date.outputs.date}}
+          release_name: release-${{steps.date.outputs.date}}
           draft: true
           prerelease: false
 
