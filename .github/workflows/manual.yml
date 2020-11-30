@@ -23,7 +23,7 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             const commit_details = await github.git.getCommit({owner: context.repo.owner, repo: context.repo.repo, commit_sha: context.sha});
-            return { date: commit_details.data.author.date.slice(0, 10) };
+            return commit_details.data.author.date.slice(0, 10);
             
   create-release:
     name: Create GitHub release
@@ -39,7 +39,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ needs.commit-date.outputs.commit_at.date }}
-          release_name: 'release-${{ needs.commit-date.outputs.commit_at.date }}'
+          release_name: ${{ 'release-' + needs.commit-date.outputs.commit_at.date }}
           draft: true
           prerelease: false
 
