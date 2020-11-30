@@ -1,16 +1,5 @@
 on: push
 
-# on:
-#   push:
-#     tags:
-#       - "v*" # matches v1.0.1, v1.2, v2, etc
-# on: 
-#   workflow_dispatch:
-#     inputs:
-#       version:
-#         description: 'Version'     
-#         required: true
-#         default: 'v'
 jobs:            
   create-release:
     name: Create GitHub release
@@ -24,7 +13,7 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
         
-      - name: Get commit Id
+      - name: Get last commit Id
         id: commit_id
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
         
@@ -34,44 +23,44 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{steps.date.outputs.date}}
+          tag_name: ${{steps.date.outputs.date}}-${{steps.commit_id.outputs.sha_short}}
           release_name: release-${{steps.date.outputs.date}}-${{steps.commit_id.outputs.sha_short}}
           draft: true
           prerelease: false
 
-#   build:
-#     name: Create release build for ${{ matrix.os }}
-#     needs: create-release
-#     strategy:
-#       matrix:
-#         os: [a, b, c]
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v2
+  build:
+    name: Create release build for ${{ matrix.os }}
+    needs: create-release
+    strategy:
+      matrix:
+        os: [a, b, c]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
         
-#       - name: Create Release Build
-#         uses: actions/setup-node@v1
-#         with:
-#           node-version: 10.x
-#       - run: npm ci
-#       - run: npm run build --if-present
-# #       - run: npm test
-#         env:
-#           CI: true
+      - name: Create Release Build
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
+      - run: npm ci
+      - run: npm run build --if-present
+#       - run: npm test
+        env:
+          CI: true
         
-#       - name: Archive Release 
-#         uses: thedoctor0/zip-release@master  
-#         with:
-#           filename: 'mimic-release-${{ matrix.os }}.zip'
-#           directory: './build'
+      - name: Archive Release 
+        uses: thedoctor0/zip-release@master  
+        with:
+          filename: 'mimic-release-${{ matrix.os }}.zip'
+          directory: './build'
 
-#       - name: Upload Release Asset
-#         id: upload-release-asset
-#         uses: actions/upload-release-asset@v1
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#         with:
-#           upload_url: ${{ needs.create-release.outputs.upload_url }}
-#           asset_path: ${{ github.workspace }}/build/mimic-release-${{ matrix.os }}.zip
-#           asset_name: mimic-release-${{ matrix.os }}.zip
-#           asset_content_type: application/zip
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ${{ github.workspace }}/build/mimic-release-${{ matrix.os }}.zip
+          asset_name: mimic-release-${{ matrix.os }}.zip
+          asset_content_type: application/zip
