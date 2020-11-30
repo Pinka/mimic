@@ -15,7 +15,7 @@ jobs:
   commit-date:
     runs-on: ubuntu-latest
     outputs:
-      commit_date: ${{ steps.author-date.outputs.result }}
+      commit_at: ${{ steps.author-date.outputs.result }}
     steps:
       - uses: actions/github-script@0.3.0
         id: author-date
@@ -23,7 +23,7 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             const commit_details = await github.git.getCommit({owner: context.repo.owner, repo: context.repo.repo, commit_sha: context.sha});
-            return commit_details.data.author.date.slice(0, 10);
+            return { date: commit_details.data.author.date.slice(0, 10) };
             
   create-release:
     name: Create GitHub release
@@ -38,8 +38,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ needs.commit-date.outputs.commit_date }}
-          release_name: 'release-${{ needs.commit-date.outputs.commit_date }}'
+          tag_name: ${{ needs.commit-date.outputs.commit_at.date }}
+          release_name: 'release-${{ needs.commit-date.outputs.commit_at.date }}'
           draft: true
           prerelease: false
 
