@@ -4,14 +4,28 @@
 #       - "v*" # matches v1.0.1, v1.2, v2, etc
 on: 
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version'     
-        required: true
-        default: 'v'
+#     inputs:
+#       version:
+#         description: 'Version'     
+#         required: true
+#         default: 'v'
 jobs:
-  once:
+  commit-date:
+    runs-on: ubuntu-latest
+    outputs:
+      commit_date: ${{ steps.author-date.outputs.result }}
+    steps:
+      - uses: actions/github-script@0.3.0
+        id: author-date
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const commit_details = await github.git.getCommit({owner: context.repo.owner, repo: context.repo.repo, commit_sha: context.sha});
+            return commit_details.data.author.date
+            
+  create-release:
     name: Create GitHub release
+    needs: commit-date
     runs-on: ubuntu-latest
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
@@ -22,14 +36,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.event.inputs.version }}
-          release_name: Release ${{ github.event.inputs.version }}
-          draft: false
-          prerelease: true
+          tag_name: ${{ needs.commit-date.outputs.commit_date }}
+          release_name: Release ${{ needs.commit-date.outputs.commit_date }}
+          draft: true
+          prerelease: false
 
   build:
     name: Create release build for ${{ matrix.os }}
-    needs: once
+    needs: create-release
     strategy:
       matrix:
         os: [a, b, c]
@@ -59,7 +73,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ needs.once.outputs.upload_url }}
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
           asset_path: ${{ github.workspace }}/build/mimic-release-${{ matrix.os }}.zip
           asset_name: mimic-release-${{ matrix.os }}.zip
           asset_content_type: application/zip
