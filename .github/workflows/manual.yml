@@ -1,9 +1,11 @@
+on: push
+
 # on:
 #   push:
 #     tags:
 #       - "v*" # matches v1.0.1, v1.2, v2, etc
-on: 
-  workflow_dispatch:
+# on: 
+#   workflow_dispatch:
 #     inputs:
 #       version:
 #         description: 'Version'     
