@@ -3,6 +3,7 @@ name: CREATE RELEASE
 # on: workflow_dispatch
 
 on:
+  workflow_dispatch
   push:
     branches: [ $default-branch ]
   pull_request:
