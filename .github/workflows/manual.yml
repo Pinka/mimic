@@ -51,14 +51,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Create Release Build
+      - name: Setup Node
         uses: actions/setup-node@v1
         with:
           node-version: 10.x
+
+      - name: Create Release Build
+        working-directory: sub-app
         run: |
           npm ci
           npm run build:${{ matrix.instance }}
-        working-directory: sub-app
         env:
           CI: true
 
