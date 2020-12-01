@@ -5,8 +5,6 @@ import History from './paper/History';
 import Bind from './paper/Bind';
 import { reducer, initialState } from './store/activeMimic/reducer';
 
-// import './App.css';
-
 export const ActiveMimicContext = React.createContext();
 
 function App() {
