@@ -63,8 +63,7 @@ jobs:
         uses: thedoctor0/zip-release@master
         with:
           filename: '${{ needs.create-release.outputs.release_name }}-${{ matrix.instance }}.zip'
-          directory: './build'
-        working-directory: ./sub-app
+          directory: './sub-app/build'
 
       - name: Upload Release Asset
         id: upload-release-asset
