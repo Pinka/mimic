@@ -15,7 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
-      release_name: release-${{steps.date.outputs.date}}-${{steps.commit_id.outputs.sha_short}}
+      release_name: ${{steps.date.outputs.date}}-${{steps.commit_id.outputs.sha_short}}
+      release_filename: ${{ github.event.repository.name }}-${{steps.date.outputs.date}}-${{steps.commit_id.outputs.sha_short}}
     steps:
       - uses: actions/checkout@v2
 
@@ -35,7 +36,6 @@ jobs:
         with:
           tag_name: ${{steps.date.outputs.date}}-${{steps.commit_id.outputs.sha_short}}
           release_name: ${{steps.date.outputs.date}}-${{steps.commit_id.outputs.sha_short}}
-          release_filename: ${{ github.event.repository.name }}-${{steps.date.outputs.date}}-${{steps.commit_id.outputs.sha_short}}
           draft: true
           prerelease: false
 
