@@ -34,7 +34,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{steps.date.outputs.date}}-${{steps.commit_id.outputs.sha_short}}
-          release_name: release-${{steps.date.outputs.date}}-${{steps.commit_id.outputs.sha_short}}
+          release_name: ${{steps.date.outputs.date}}-${{steps.commit_id.outputs.sha_short}}
+          release_filename: ${{ github.event.repository.name }}-${{steps.date.outputs.date}}-${{steps.commit_id.outputs.sha_short}}
           draft: true
           prerelease: false
 
@@ -45,14 +46,9 @@ jobs:
       matrix:
         instance: [a, b, c]
     runs-on: ubuntu-latest
-    # defaults:
-    #   run:
-    #     working-directory: sub-app
     steps:
       - uses: actions/checkout@v2
-
-      - name: Setup Node
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v1
         with:
           node-version: 10.x
 
@@ -67,7 +63,7 @@ jobs:
       - name: Archive Release
         uses: thedoctor0/zip-release@master
         with:
-          filename: '${{ needs.create-release.outputs.release_name }}-${{ matrix.instance }}.zip'
+          filename: '${{ needs.create-release.outputs.release_filename }}-${{ matrix.instance }}.zip'
           directory: './sub-app/build'
 
       - name: Upload Release Asset
@@ -77,6 +73,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}/sub-app/build/${{ needs.create-release.outputs.release_name }}-${{ matrix.instance }}.zip
-          asset_name: ${{ needs.create-release.outputs.release_name }}-${{ matrix.instance }}.zip
+          asset_path: ${{ github.workspace }}/sub-app/build/${{ needs.create-release.outputs.release_filename }}-${{ matrix.instance }}.zip
+          asset_name: ${{ needs.create-release.outputs.release_filename }}-${{ matrix.instance }}.zip
           asset_content_type: application/zip
