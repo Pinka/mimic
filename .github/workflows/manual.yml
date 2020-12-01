@@ -52,8 +52,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 10.x
+        working-directory: ./sub-app
       - run: ls -a
-      - run: cd sub-app
       - run: npm ci
       - run: npm run build:${{ matrix.instance }}
         env:
@@ -63,7 +63,8 @@ jobs:
         uses: thedoctor0/zip-release@master
         with:
           filename: '${{ needs.create-release.outputs.release_name }}-${{ matrix.instance }}.zip'
-          directory: './VisionClient/build'
+          directory: './build'
+        working-directory: ./sub-app
 
       - name: Upload Release Asset
         id: upload-release-asset
