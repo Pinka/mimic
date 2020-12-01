@@ -3,7 +3,7 @@ name: CREATE RELEASE
 on:
   push:
     branches: 
-      - master
+      - $default-branch
   # workflow_dispatch:
 
 jobs:
