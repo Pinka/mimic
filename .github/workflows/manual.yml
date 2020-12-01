@@ -1,10 +1,10 @@
 name: CREATE RELEASE
 
 on:
+  workflow_dispatch:
   push:
     branches: 
-      - $default-branch
-  # workflow_dispatch:
+      - master
 
 jobs:
   create-release:
