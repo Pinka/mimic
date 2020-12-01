@@ -1,13 +1,9 @@
 name: CREATE RELEASE
 
-# on: workflow_dispatch
-
 on:
   push:
     branches: [ $default-branch ]
-  pull_request:
-    branches: [ $default-branch ]
-  workflow_dispatch:
+  # workflow_dispatch:
 
 jobs:
   create-release:
