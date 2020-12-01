@@ -45,9 +45,9 @@ jobs:
       matrix:
         instance: [a, b, c]
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: sub-app
+    # defaults:
+    #   run:
+    #     working-directory: sub-app
     steps:
       - uses: actions/checkout@v2
 
@@ -55,9 +55,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 10.x
-      - run: ls -a
-      - run: npm ci
-      - run: npm run build:${{ matrix.instance }}
+        run: |
+          npm ci
+          npm run build:${{ matrix.instance }}
+        working-directory: sub-app
         env:
           CI: true
 
@@ -65,7 +66,7 @@ jobs:
         uses: thedoctor0/zip-release@master
         with:
           filename: '${{ needs.create-release.outputs.release_name }}-${{ matrix.instance }}.zip'
-          directory: './build'
+          directory: './sub-app/build'
 
       - name: Upload Release Asset
         id: upload-release-asset
@@ -74,6 +75,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}/build/${{ needs.create-release.outputs.release_name }}-${{ matrix.instance }}.zip
+          asset_path: ${{ github.workspace }}/sub-app/build/${{ needs.create-release.outputs.release_name }}-${{ matrix.instance }}.zip
           asset_name: ${{ needs.create-release.outputs.release_name }}-${{ matrix.instance }}.zip
           asset_content_type: application/zip
