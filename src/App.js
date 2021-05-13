@@ -8,16 +8,16 @@ import { reducer, initialState } from "./store/activeMimic/reducer";
 export const ActiveMimicContext = React.createContext();
 
 function App() {
-    const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-    return (
-        <ActiveMimicContext.Provider value={{ state, dispatch }}>
-            <Paper />
-            <PaperTools />
-            <History />
-            <Bind />
-        </ActiveMimicContext.Provider>
-    );
+  return (
+    <ActiveMimicContext.Provider value={{ state, dispatch }}>
+      <Paper />
+      <PaperTools />
+      <History />
+      <Bind />
+    </ActiveMimicContext.Provider>
+  );
 }
 
 export default App;

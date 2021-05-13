@@ -1,18 +1,18 @@
 :root {
-    --button-background-color: rgba(255, 255, 255, 0.87);
-    --button-border-color: rgba(0, 0, 0, 0.54);
-    --button-text-color: rgba(0, 0, 0, 0.87);
+  --button-background-color: rgba(255, 255, 255, 0.87);
+  --button-border-color: rgba(0, 0, 0, 0.54);
+  --button-text-color: rgba(0, 0, 0, 0.87);
 
-    --panel-background-color: rgba(255, 255, 255, 0.87);
-    --panel-border-color: rgba(0, 0, 0, 0.54);
+  --panel-background-color: rgba(255, 255, 255, 0.87);
+  --panel-border-color: rgba(0, 0, 0, 0.54);
 }
 
 html,
 body,
 canvas {
-    width: 100vw;
-    height: 100vh;
-    padding: 0;
-    margin: 0;
-    overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
 }

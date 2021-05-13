@@ -1,18 +1,18 @@
 .popup {
-    border: 1px solid #ccc;
-    box-shadow: 1px 3px 2px #ccc;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 11px;
-    background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 1px 3px 2px #ccc;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 11px;
+  background-color: white;
 }
 
 .popup-item {
-    padding: 5px;
-    text-transform: uppercase;
-    cursor: pointer;
+  padding: 5px;
+  text-transform: uppercase;
+  cursor: pointer;
 }
 
 .popup-item:hover {
-    background-color: #fff;
-    background-color: rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  background-color: rgba(0, 0, 0, 0.1);
 }
