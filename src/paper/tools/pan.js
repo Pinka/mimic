@@ -1,3 +1,5 @@
+import paper from 'paper';
+
 export const addToolPan = () => {
 
     const name = "toolPan";
