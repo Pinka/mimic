@@ -59,7 +59,8 @@ class Popup extends React.Component {
                     ref={this.triggerRef}
                     onClick={this.togglePopup}
                 >
-                    Open Popup
+                    {" "}
+                    Open Popup{" "}
                 </div>
 
                 <Portal>
