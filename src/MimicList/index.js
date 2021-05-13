@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createPopper } from "@popperjs/core";
-import "./Popup.css";
 import Portal from "../Portal";
 import FocusTrap from "focus-trap-react";
 import { getMimicsList } from "../paper/utils";
+
+import "./Popup.css";
 
 const MimicList = (props) => {
   const triggerRef = useRef();

@@ -49,28 +49,27 @@ class Popup extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <>
         <div
           className="trigger"
           ref={this.triggerRef}
           onClick={this.togglePopup}
         >
-          {" "}
-          Open Popup{" "}
+          Open Popup
         </div>
 
         <Portal>
           <div className="popup__container" ref={this.popupRef}>
             {this.state.isOpen && (
-              <React.Fragment>
+              <>
                 <div className="popup">
                   <div tabIndex={0}>I am the popup 2</div>
                 </div>
-              </React.Fragment>
+              </>
             )}
           </div>
         </Portal>
-      </React.Fragment>
+      </>
     );
   }
 }
