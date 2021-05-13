@@ -3,3 +3,9 @@ build
 coverage
 node_modules
 public
+.github
+.vscode
+.vs
+bin
+obj
+package-lock.json

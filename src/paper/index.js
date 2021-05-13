@@ -1,78 +1,71 @@
-import React, { useEffect, memo, useRef, useContext } from 'react';
-import paper from 'paper';
-import { addGrid, load, bind, onAction, getMimicName } from './utils';
-import { addToolSelect } from './tools/select';
-import { ActiveMimicContext } from '../App';
+import React, { useEffect, memo, useRef, useContext } from "react";
+import paper from "paper";
+import { addGrid, load, bind, onAction, getMimicName } from "./utils";
+import { addToolSelect } from "./tools/select";
+import { ActiveMimicContext } from "../App";
 
 const Paper = memo(() => {
+  const ref = useRef();
+  const actionQueue = useRef([]);
+  const { dispatch } = useContext(ActiveMimicContext);
 
-    const ref = useRef();
-    const actionQueue = useRef([]);
-    const { dispatch } = useContext(ActiveMimicContext);
+  useEffect(() => {
+    const queue = actionQueue.current;
 
-    useEffect(() => {
+    paper.setup(ref.current);
 
-        const queue = actionQueue.current;
+    addToolSelect();
+    addGrid();
+    load();
 
-        paper.setup(ref.current);
+    dispatch({
+      type: "SetMimicName",
+      payload: getMimicName(),
+    });
 
-        addToolSelect();
-        addGrid();
-        load();
+    bind();
 
-        dispatch({
-            type: 'SetMimicName',
-            payload: getMimicName()
-        });
+    paper.view.onFrame = (event) => {
+      if (queue.length > 0) {
+        const action = queue[queue.length - 1];
+        onAction(action);
 
-        bind();
-
-        paper.view.onFrame = (event) => {
-            if (queue.length > 0) {
-
-                const action = queue[queue.length - 1];
-                onAction(action);
-
-                const index = queue.indexOf(action);
-                if (index > -1) {
-                    queue.splice(index, 1);
-                }
-            }
+        const index = queue.indexOf(action);
+        if (index > -1) {
+          queue.splice(index, 1);
         }
+      }
+    };
 
-        setInterval(() => {
-            bind();
-        }, 5000);
+    setInterval(() => {
+      bind();
+    }, 5000);
 
-        // TODO REMOVE
-        setInterval(() => {
+    // TODO REMOVE
+    setInterval(() => {
+      new Array(10)
+        .fill(null)
+        .map((action, index) => ({
+          type: "update",
+          payload: {
+            itemName: "rect" + index,
+            values: {
+              fillColor: paper.Color.random(),
+            },
+          },
+        }))
+        .forEach((action) => {
+          queue.push(action);
+        });
+    }, 1000);
 
-            new Array(10)
-                .fill(null)
-                .map((action, index) => ({
-                    type: "update",
-                    payload: {
-                        itemName: "rect" + index,
-                        values: {
-                            fillColor: paper.Color.random()
-                        }
-                    }
-                }))
-                .forEach(action => {
-                    queue.push(action);
-                });
+    // return () => {
+    //     clearInterval();
+    //     clearInterval();
+    // }
+  }, [dispatch]);
 
-        }, 1000);
-
-        // return () => {
-        //     clearInterval();
-        //     clearInterval();
-        // }
-    }, [dispatch]);
-
-    return (
-        <canvas ref={ref} resize="resize"></canvas>
-    );
+  return <canvas ref={ref} resize="resize"></canvas>;
 });
 
 export default Paper;

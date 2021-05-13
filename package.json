@@ -60,7 +60,10 @@
     "prettier": "2.3.0"
   },
   "lint-staged": {
-    "*.{js,css,md}": [
+    "*.{css,scss}": [
+      "prettier --write"
+    ],
+    "*.{js,md}": [
       "npm run lint",
       "prettier --write"
     ]
