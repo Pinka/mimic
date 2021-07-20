@@ -1,4 +1,5 @@
+import { hello } from "ui/form/utils";
 
 test('app', () => {
-  expect(true).toBe(true);
+  expect(hello()).toBe("Hello from form utils!");
 });
