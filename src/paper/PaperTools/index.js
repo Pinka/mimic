@@ -5,6 +5,7 @@ import { addLine, addCircle, addRect, addText, save, createNew, getMimicLayer } 
 import styles from './PaperTools.module.css';
 import MimicList from '../../MimicList';
 import { ActiveMimicContext } from '../../App';
+import { hello } from "ui/form/utils";
 
 const PaperTools = memo(() => {
 
@@ -35,6 +36,7 @@ const PaperTools = memo(() => {
         { title: "Add Line", onClick: addLine },
         { title: "Add Circle", onClick: addCircle },
         { title: "Add Rect", onClick: addRect },
+        { title: hello(), onClick: alert },
         // { title: "Undo", onClick: revertHistory },
         // { title: "Refresh Bindings", onClick: bind}
     ];
