@@ -1,9 +1,10 @@
 const path = require('path');
 
+const testDir = 'tests';
 const outputDir = 'test-results';
 
 const config = {
-    testDir: 'tests',
+    testDir,
     outputDir,
     forbidOnly: !!process.env.CI,
     preserveOutput: process.env.CI ? 'failures-only' : 'always',
@@ -11,7 +12,7 @@ const config = {
     workers: process.env.CI ? 1 : undefined,
     reporter: process.env.CI ? [
         [ 'dot' ],
-        [ 'json', { outputFile: 'report.json' } ],
+        [ 'json', { outputFile: path.join(testDir, outputDir, 'report.json') } ],
       ] : 'line',
     use: {
         headless: false,
