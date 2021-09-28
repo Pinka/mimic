@@ -11,7 +11,7 @@ const config = {
     workers: process.env.CI ? 1 : undefined,
     reporter: process.env.CI ? [
         [ 'dot' ],
-        [ 'json', { outputFile: path.join(outputDir, 'report.json') } ],
+        [ 'json', { outputFile: 'report.json' } ],
       ] : 'line',
     use: {
         headless: false,
