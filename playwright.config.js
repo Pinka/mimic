@@ -1,10 +1,18 @@
-// @ts-check
-/** @type {import('@playwright/test').PlaywrightTestConfig} */
+const path = require('path');
+
+const outputDir = 'test-results';
+
 const config = {
     testDir: 'tests',
+    outputDir,
     forbidOnly: !!process.env.CI,
-    retries: 1,
-    workers: process.env.CI ? 2 : undefined,
+    preserveOutput: process.env.CI ? 'failures-only' : 'always',
+    retries: process.env.CI ? 1 : 0,
+    workers: process.env.CI ? 1 : undefined,
+    reporter: process.env.CI ? [
+        [ 'dot' ],
+        [ 'json', { outputFile: path.join(outputDir, 'report.json') } ],
+      ] : 'line',
     use: {
         headless: false,
         viewport: {
@@ -15,4 +23,5 @@ const config = {
         video: 'on-first-retry',
     },
 };
+
 module.exports = config;
