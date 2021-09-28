@@ -1,5 +1,6 @@
 import paper from 'paper';
 import faker from 'faker';
+import * as htmlToImage from 'html-to-image';
 
 export const defaultFillColor = 'rgba(0,0,0,0.87)';
 export const defaultStrokeColor = 'rgba(0,0,0,0.87)';
@@ -300,7 +301,7 @@ export const createNew = async () => {
 };
 
 export const save = async () => {
-    
+
     const mimicLayer = getMimicLayer();
 
     const name = mimicLayer.data.mimicName ?? faker.random.words();
@@ -326,20 +327,20 @@ export const save = async () => {
             body: JSON.stringify(data)
         });
     }
-    catch(error) {
+    catch (error) {
         console.log("Save mimic error", error);
     }
 };
 
 export const load = async () => {
-    
+
     let mimicLayer = getMimicLayer();
     const config = localStorage.getItem('project');
     const mimicName = localStorage.getItem('projectName') ?? faker.random.words();
 
     if (config) {
 
-        if(!mimicLayer) {
+        if (!mimicLayer) {
             mimicLayer = paper.project.addLayer(new paper.Layer());
             mimicLayer.name = MIMIC_LAYER_NAME;
             mimicLayer.activate();
@@ -372,7 +373,7 @@ export const getMimicsList = async () => {
 
         return mimics;
     }
-    catch(error) {
+    catch (error) {
         console.log("Mimics load error", error);
     }
 };
@@ -383,6 +384,16 @@ export const getMimicLayer = () => {
 
 export const getMimicName = () => {
     return getMimicLayer()?.data.mimicName;
+};
+
+export const takeScreenshot = (element) => {
+    htmlToImage.toPng(element ?? document.getElementById("root"))
+        .then(function (dataUrl) {
+            var link = document.createElement("a");
+            link.href = dataUrl;
+            link.download = 'screenshot.png';
+            link.click();
+        });
 };
 
 export const get = (obj = this, path, separator = '.') => {

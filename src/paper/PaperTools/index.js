@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useContext } from 'react';
-import { addLine, addCircle, addRect, addText, save, createNew, getMimicLayer } from '../utils';
+import { addLine, addCircle, addRect, addText, save, createNew, getMimicLayer, takeScreenshot } from '../utils';
 // import { revertHistory } from '../tools/history';
 
 import styles from './PaperTools.module.css';
@@ -37,6 +37,7 @@ const PaperTools = memo(() => {
         { title: "Add Circle", onClick: addCircle },
         { title: "Add Rect", onClick: addRect },
         { title: hello(), onClick: alert },
+        { title: "Take Screenshot", onClick: takeScreenshot },
         // { title: "Undo", onClick: revertHistory },
         // { title: "Refresh Bindings", onClick: bind}
     ];
